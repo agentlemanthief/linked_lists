@@ -88,6 +88,18 @@
         tmp = tmp.next_node
       end
     end
+
+    def to_s
+      string = "nil"
+      count = 0
+      tmp = @head
+      while tmp != nil
+        string.prepend("( #{tmp.value} ) -> ")
+        count += 1
+        tmp = tmp.next_node
+      end
+      puts string
+    end
   end
 
   class Node
@@ -119,8 +131,8 @@ p list.pop
 
 p list.size
 
-p list
-
 p list.contains?(5)
 
 p list.find(4)
+
+list.to_s
