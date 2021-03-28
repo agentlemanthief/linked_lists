@@ -38,7 +38,6 @@
     end
 
     def at(index)
-      # Return node at index
       count = 0
       tmp = @head
       while tmp != nil
@@ -70,6 +69,25 @@
         end
       end
     end
+
+    def contains?(value)
+      tmp = @head
+      while tmp != nil
+        return true if tmp.value == value
+        tmp = tmp.next_node
+      end
+      false
+    end
+
+    def find(value)
+      count = 0
+      tmp = @head
+      while tmp != nil
+        return count if tmp.value == value
+        count += 1
+        tmp = tmp.next_node
+      end
+    end
   end
 
   class Node
@@ -82,14 +100,12 @@
 
 list = LinkedList.new
 
-list.append(1)
-list.append(2)
 list.append(3)
 list.append(4)
 list.append(5)
 
-# list.prepend(2)
-# list.prepend(1)
+list.prepend(2)
+list.prepend(1)
 
 puts "The value of the node at Head is: #{list.head}"
 
@@ -100,11 +116,11 @@ puts "The size of the list is: #{list.size}"
 puts "The value of the node at index 3 is: #{list.at(3)}"
 
 p list.pop
-p list.pop
-p list.pop
-p list.pop
-p list.pop
 
 p list.size
 
 p list
+
+p list.contains?(5)
+
+p list.find(4)
