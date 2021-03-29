@@ -1,3 +1,5 @@
+require_relative 'node'
+
 # Class defining an implementation of a linked list
 class LinkedList
   attr_reader :head, :tail
@@ -29,129 +31,104 @@ class LinkedList
 
   def size
     count = 0
-    tmp = @head
+    pointer = @head
     return count if @head.nil?
 
     return count + 1 if @head == @tail
 
-    until tmp.nil?
+    until pointer.nil?
       count += 1
-      tmp = tmp.next_node
+      pointer = pointer.next_node
     end
     count
   end
 
   def at(index)
     count = 0
-    tmp = @head
+    pointer = @head
     return nil if index > size
-    until tmp.nil?
-      count += 1
-      tmp = tmp.next_node
-      return tmp.value if count == index
 
+    until pointer.nil?
+      return pointer.value if count == index
+
+      count += 1
+      pointer = pointer.next_node
     end
   end
 
   def pop
-    count = 0
-    tmp = @head
-    return 'Cannot delete as there are no items' if @head.nil?
+    return puts 'Cannot delete as there are no items in the list' if @head.nil?
 
     if size == 1
       @head = nil
       @tail = nil
       return
     end
-    size_2_pop
-    pop_helper(tmp, count)
-  end
-
-  def pop_helper(tmp, count)
-    until tmp.nil?
-      count += 1
-      tmp = tmp.next_node
-      if count == size - 2
-        tmp.next_node = nil
-        @tail = tmp
-      end
-    end
-  end
-
-  def size_2_pop
-    return unless @head.next_node.next_node.nil?
-    @head.next_node = nil
-    @tail = @head
+    pointer = @head
+    pointer = pointer.next_node until pointer.next_node == @tail
+    pointer.next_node = nil
+    @tail = pointer
   end
 
   def contains?(value)
-    tmp = @head
-    until tmp.nil?
-      return true if tmp.value == value
+    pointer = @head
+    until pointer.nil?
+      return true if pointer.value == value
 
-      tmp = tmp.next_node
+      pointer = pointer.next_node
     end
     false
   end
 
   def find(value)
     count = 0
-    tmp = @head
-    until tmp.nil?
-      return count if tmp.value == value
+    pointer = @head
+    until pointer.nil?
+      return count if pointer.value == value
 
       count += 1
-      tmp = tmp.next_node
+      pointer = pointer.next_node
     end
   end
 
   def to_s
     string = ''
     count = 0
-    tmp = @head
-    until tmp.nil?
-      string.concat("( #{tmp.value} ) -> ")
+    pointer = @head
+    until pointer.nil?
+      string << "( #{pointer.value} ) -> "
       count += 1
-      tmp = tmp.next_node
+      pointer = pointer.next_node
     end
-    string.concat('nil')
+    string << 'nil'
     puts string
   end
-end
 
-# Class defining a node for use with linked lists
-class Node
-  attr_accessor :value, :next_node
+  def insert_at(value, index)
+    count = 0
+    pointer = @head
+    return puts 'Cannot insert at this index as the list is too short' if index > size
 
-  def initialize(value = nil)
-    @value = value
-    @next_node = nil
+    until count == index - 1
+      count += 1
+      pointer = pointer.next_node
+    end
+    new_node = Node.new(value)
+    @tail = new_node if size == index
+    new_node.next_node = pointer.next_node
+    pointer.next_node = new_node
+  end
+
+  def remove_at(index)
+    count = 0
+    pointer = @head
+    return puts 'Cannot remove, index does not exist' if index > size - 1
+
+    until count == index - 1
+      count += 1
+      pointer = pointer.next_node
+    end
+    @tail = pointer if pointer.next_node == @tail
+    pointer.next_node = pointer.next_node.next_node
   end
 end
-
-list = LinkedList.new
-
-list.append(3)
-# list.append(4)
-# list.append(5)
-
-# list.prepend(2)
-# list.prepend(1)
-
-puts "The value of the node at Head is: #{list.head}"
-
-puts "The value of the node at Tail is: #{list.tail}"
-
-puts "The size of the list is: #{list.size}"
-
-puts "The value of the node at index 3 is: #{list.at(3)}"
-
-list.pop
-
-puts "The size of the list is now: #{list.size}"
-
-p list.contains?(5)
-
-p list.find(4)
-
-list.to_s
