@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'node'
 
 # Class defining an implementation of a linked list
