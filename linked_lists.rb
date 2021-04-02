@@ -48,7 +48,7 @@ class LinkedList
   def at(index)
     count = 0
     pointer = @head
-    return nil if index > size
+    return 'nil' if index > size - 1
 
     until pointer.nil?
       return pointer.value if count == index
